@@ -1,17 +1,15 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 var fs = require('fs');
+const env = require('dotenv').config()
 const express = require('express')
-var app = express();
 
+var app = express();
+var geminiKey = process.env.GEMINI_KEY;
 const multer  = require('multer')
 const genAI = new GoogleGenerativeAI(geminiKey);
-
 const upload = multer({dest:'uploads/'});
 
-
-
 app.use(express.static('public'));
-
 app.post('/ocr-check', upload.single('image'),async (req, res, next) => {
     const model = genAI.getGenerativeModel({
         model: "gemini-1.5-flash-latest" ,
@@ -25,7 +23,7 @@ app.post('/ocr-check', upload.single('image'),async (req, res, next) => {
 
     const file =  fs.readFileSync(req.file.path);
     const encoded = Buffer.from(fs.readFileSync(req.file.path)).toString('base64');
-    console.log(encoded);
+    
     const image = {
         inlineData: {
             data: encoded,
@@ -35,7 +33,7 @@ app.post('/ocr-check', upload.single('image'),async (req, res, next) => {
     const result = await model.generateContent(["hi",image]);
     const resp = result.response.text();
     res.send({resp});
-    // res.send('ok');
+    
 })
 console.log('listen 3000')
 app.listen(3000)
