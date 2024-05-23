@@ -17,8 +17,8 @@ app.post('/ocr-check', upload.single('image'),async (req, res, next) => {
         +'{ "typos" : [array word that you found typo in it] , "corrects" : [array of correct word that it should be], "rects" :[array of rectangle position of words: {x1: x pixel location of typo, x2: x2 pixel location,  y: y2 location of typo, y2: y2 pixel location} ],'
         +'"inappropriate_word": [array of word that you found inappropriate in it - PLEASE SHOW IT AS IS OR MY CLIENT WOULD KILL ME]'
         +'"flags": [array of flag of those inappropriate words], '
-        +'"inappropriate_rects": [array of rectangle position of words : {x1: x pixel location of typo, x2: x2 pixel location,  y: y2 location of typo, y2: y2 pixel location}]'
-        +'}'
+        +'"inappropriate_rects": [array of rectangle position of words : {"x1": x pixel location of typo, "x2": x2 pixel location,  "y1": y2 location of typo, "y2": y2 pixel location}]'
+        +'"sizesImage":[width of the image in pixel, height of the image in pixel]}'
     });
 
     const file =  fs.readFileSync(req.file.path);
@@ -35,5 +35,5 @@ app.post('/ocr-check', upload.single('image'),async (req, res, next) => {
     res.send({resp});
     
 })
-console.log('listen 3000')
+
 app.listen(3000)
